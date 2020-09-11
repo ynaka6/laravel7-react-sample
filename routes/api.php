@@ -18,4 +18,6 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
+Route::post('/login', 'Api\Auth\LoginController@login');
+Route::delete('/logout', 'Api\Auth\LoginController@logout');
 Route::get('/products', 'Api\Product\ListContrtoller@index');

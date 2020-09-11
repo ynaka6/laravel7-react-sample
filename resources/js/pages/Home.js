@@ -1,50 +1,42 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Table } from 'react-bootstrap';
 import PageTitle from "../components/PageTitle";
 import axios from 'axios';
 
-export default class Home extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      products: []
-    }
-  }
+export default function Home() {
+  const [products, setProducts] = useState([]);
 
-  componentDidMount() {
+  useEffect(() => {
     axios.get(`/api/products`)
       .then(response => {
-        const products = response.data;
-        this.setState({ products });
-        console.log(products)
+        setProducts(response.data);
       })
-  }
+    return () => setProducts(null); // Abort both fetches on unmount
+  }, []);
 
-  render() {
-    return (
-      <>
-        <PageTitle title="HOME" />
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Product Name</th>
-            </tr>
-          </thead>
-          <tbody>
-            { this.state.products.map(product => {
-                return (
-                  <tr key={product.id}>
-                    <td>{product.id}</td>
-                    <td>{product.name}</td>
-                  </tr>
-                )
-              })
-            }
-          </tbody>
-        </Table>
-      </>
-    )
-  }
+  return (
+    <>
+      <PageTitle title="HOME" />
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Product Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          { products.map(product => {
+              return (
+                <tr key={product.id}>
+                  <td>{product.id}</td>
+                  <td>{product.name}</td>
+                </tr>
+              )
+            })
+          }
+        </tbody>
+      </Table>
+    </>
+  )
 }
   
